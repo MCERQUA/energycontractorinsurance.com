@@ -6,6 +6,7 @@ import { COPY } from "@/lib/content";
 import { FadeIn } from "@/components/animations/FadeIn";
 
 export function Testimonials() {
+  if (TESTIMONIALS.length === 0) return null;
   return (
     <section id="testimonials" className="relative bg-cream py-20 md:py-28">
       <div className="container-wide">

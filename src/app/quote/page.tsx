@@ -7,9 +7,8 @@ import { Footer } from "@/components/sections/Footer";
 import { FadeIn } from "@/components/animations/FadeIn";
 import { SITE } from "@/lib/site";
 import { US_STATES, QUOTE_SERVICE_TYPES, YEARS_OPTIONS, COPY } from "@/lib/content";
+import { submitNetlifyForm } from "@/lib/submitForm";
 import { CheckCircle2, ShieldCheck, ArrowRight, Phone, Clock, Zap, MapPin } from "lucide-react";
-
-const WEBHOOK_URL = `https://josh.jam-bot.com/social-api/api/leads/webhook/netlify?tenant=josh&site=${SITE.domain}`;
 
 const trustItems = [
   { icon: ShieldCheck, title: COPY.quote.trustNicheTitle, desc: COPY.quote.trustNicheDesc },
@@ -36,7 +35,7 @@ export default function QuotePage() {
     setSubmitting(true);
     setError("");
     try {
-      await fetch(WEBHOOK_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ form_name: "quote", source: SITE.domain, ...formData }) });
+      await submitNetlifyForm("quote", formData);
       setSubmitted(true);
     } catch {
       setError(COPY.quote.errorMessage);

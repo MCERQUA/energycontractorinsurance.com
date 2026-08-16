@@ -6,9 +6,8 @@ import { Footer } from "@/components/sections/Footer";
 import { FadeIn } from "@/components/animations/FadeIn";
 import { SITE } from "@/lib/site";
 import { COPY } from "@/lib/content";
+import { submitNetlifyForm } from "@/lib/submitForm";
 import { CheckCircle2, ArrowRight, Phone, Mail, MapPin, Clock, MessageCircle } from "lucide-react";
-
-const WEBHOOK_URL = `https://josh.jam-bot.com/social-api/api/leads/webhook/netlify?tenant=josh&site=${SITE.domain}`;
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({ name: "", email: "", phone: "", subject: "", message: "", "bot-field": "" });
@@ -26,7 +25,7 @@ export default function ContactPage() {
     setSubmitting(true);
     setError("");
     try {
-      await fetch(WEBHOOK_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ form_name: "contact", source: SITE.domain, ...formData }) });
+      await submitNetlifyForm("contact", formData);
       setSubmitted(true);
     } catch {
       setError(COPY.contact.errorMessage);

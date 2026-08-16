@@ -1,14 +1,14 @@
 // Centralized site data — used across nav, footer, schema, CTAs
-// Dairy Insurance — dairy farm & dairy operations coverage
+// Energy Contractor Insurance — insurance for solar, HVAC, electrical & energy-efficiency contractors
 
 export const SITE = {
-  name: "Dairy Insurance",
-  legalName: "Dairy Insurance (by Contractors Choice Agency)",
-  domain: "dairy-insurance.com",
-  url: "https://dairy-insurance.com",
-  tagline: "Insurance for Dairy Farms & Dairy Operations",
+  name: "Energy Contractor Insurance",
+  legalName: "Energy Contractor Insurance (by Contractors Choice Agency)",
+  domain: "energycontractorinsurance.com",
+  url: "https://energycontractorinsurance.com",
+  tagline: "Insurance for Solar, HVAC, Electrical & Energy Contractors",
   description:
-    "Specialized commercial insurance for dairy farms and dairy operations — dairy cattle & livestock mortality, milking parlors and barns, bulk-tank and chiller equipment breakdown with milk spoilage, dairy product liability, manure and runoff pollution, workers' comp, commercial auto for milk tankers, and crop/feed. Licensed all 50 states.",
+    "Specialized commercial insurance for energy contractors — solar installers, HVAC and electrical contractors, insulation and weatherization crews, and geothermal and energy-efficiency installers. General liability, workers' comp, commercial auto, tools & equipment, errors & omissions, and pollution liability. Licensed all 50 states.",
   phone: "844-967-5247",
   phoneAlt: "855-336-7189",
   phoneHref: "tel:+18449675247",
@@ -31,21 +31,21 @@ export const SITE = {
 
 // Niche nouns used in headings, metadata, and component copy
 export const BRAND = {
-  brandShort: "Dairy",
-  brandSub: "Farm Insurance",
-  nicheShort: "dairy farm",
-  nicheShortCap: "Dairy Farm",
-  nichePlural: "dairy farms",
-  nichePluralCap: "Dairy Farms",
-  operator: "dairy operation",
-  operatorCap: "Dairy Operation",
-  industry: "dairy farming",
-  industryCap: "Dairy Farming",
-  audience: "dairy producers",
-  audienceCap: "Dairy Producers",
-  ownerTitle: "dairy farmer",
-  regionPill: "Wisconsin · California · National",
-  serviceSuffix: "Dairy Farms",
+  brandShort: "Energy Contractor",
+  brandSub: "Contractor Insurance",
+  nicheShort: "energy contractor",
+  nicheShortCap: "Energy Contractor",
+  nichePlural: "energy contractors",
+  nichePluralCap: "Energy Contractors",
+  operator: "energy contracting business",
+  operatorCap: "Energy Contracting Business",
+  industry: "energy contracting",
+  industryCap: "Energy Contracting",
+  audience: "solar, HVAC & electrical contractors",
+  audienceCap: "Solar, HVAC & Electrical Contractors",
+  ownerTitle: "energy contractor",
+  regionPill: "California · Texas · National",
+  serviceSuffix: "Energy Contractors",
 } as const;
 
 export const NAV_LINKS = [
@@ -59,108 +59,105 @@ export const NAV_LINKS = [
 
 export const SERVICES = [
   {
-    slug: "livestock-mortality",
-    title: "Dairy Cattle & Livestock Mortality",
-    short: "Protect the herd that drives your income",
-    description:
-      "The coverage that defines a dairy's risk. Insures your milking cows, heifers, calves, and registered breeding stock against death from accident, disease, theft, and disaster — including named peril and full-mortality options on high-value animals.",
-    icon: "Milk",
-    keywords: ["dairy cattle insurance", "livestock mortality insurance", "dairy cow mortality coverage", "cattle death loss insurance"],
-  },
-  {
-    slug: "farm-property",
-    title: "Farm Property & Buildings",
-    short: "Barns, milking parlors, silos & feed storage",
-    description:
-      "All-risk coverage for the dairy complex — freestall barns, milking parlors and holding areas, commodity sheds, commodity and bunker silos, feed storage, and the contents and inventory inside them. Built for livestock and manure exposures.",
-    icon: "Building2",
-    keywords: ["dairy farm property insurance", "barn insurance", "milking parlor coverage", "farm building insurance dairy"],
-  },
-  {
-    slug: "equipment-spoilage",
-    title: "Equipment Breakdown & Milk Spoilage",
-    short: "Milking systems, bulk tanks & chillers",
-    description:
-      "Covers mechanical or electrical breakdown of the equipment your operation depends on — milking systems, plate coolers, bulk tanks, compressors and chillers — plus the milk and product spoilage that follows when cooling or processing fails.",
-    icon: "Gauge",
-    keywords: ["dairy equipment breakdown insurance", "milk spoilage insurance", "bulk tank coverage", "chiller breakdown dairy"],
-  },
-  {
-    slug: "dairy-product-liability",
-    title: "Dairy Product Liability",
-    short: "For milk and dairy products you ship",
-    description:
-      "Coverage for bodily injury or property damage arising from contaminated, mislabeled, or defective milk and dairy products after they leave your farm or creamery — including recall costs and defense when a foodborne-illness or adulteration claim is made.",
-    icon: "FlaskConical",
-    keywords: ["dairy product liability insurance", "milk contamination insurance", "dairy recall coverage", "food liability dairy farm"],
-  },
-  {
     slug: "general-liability",
     title: "General Liability Insurance",
-    short: "Premises, agri-tourism & daily operations",
+    short: "Jobsite injury, property damage & completed-ops",
     description:
-      "Third-party bodily injury and property damage protection for farm visitors, farm tours and agri-tourism, deliveries, custom heifer raising, and the day-to-day operations of running a working dairy.",
+      "Third-party bodily injury and property damage protection for solar, HVAC, and electrical jobsites — plus completed-operations coverage for the years after a system is installed, when most energy-contractor claims actually surface.",
     icon: "ShieldCheck",
-    keywords: ["dairy farm general liability", "agritourism insurance", "farm premises liability", "dairy GL insurance"],
+    keywords: ["energy contractor general liability", "solar installer insurance", "HVAC contractor liability insurance", "electrical contractor GL insurance"],
   },
   {
     slug: "workers-compensation",
     title: "Workers' Compensation",
-    short: "For milking crews, feeders & herdsmen",
+    short: "Roof, ladder, electrical & confined-space crews",
     description:
-      "Coverage for the real injury patterns in dairy work — animal-handling and trampling injuries, milking-parlor slip and crush injuries, equipment and PTO incidents, and chemical and manure-exposure claims. Proper class codes for dairy labor.",
+      "Coverage for the real injury patterns in energy contracting — roof falls during solar installs, ladder and lift injuries, electrical shock and arc-flash, confined-space HVAC work, and lifting injuries. Proper class codes for energy trades.",
     icon: "HardHat",
-    keywords: ["dairy workers compensation", "farm labor workers comp", "dairy worker injury insurance", "agricultural workers comp dairy"],
+    keywords: ["energy contractor workers comp", "solar installer workers compensation", "HVAC workers comp class code", "electrician workers comp insurance"],
   },
   {
     slug: "commercial-auto",
-    title: "Commercial Auto & Trucking",
-    short: "Milk tankers, feed trucks & farm vehicles",
+    title: "Commercial Auto & Fleet",
+    short: "Service vans, bucket trucks & install trailers",
     description:
-      "Coverage for the milk tankers, feed and commodity trucks, pickup trucks, tractors, and equipment you run on public roads — including hired and non-owned auto when employees use their own vehicles on dairy business.",
+      "Coverage for the service vans, pickup trucks, bucket trucks, and equipment trailers you run between jobsites — including hired and non-owned auto when techs use their own vehicles on company business.",
     icon: "Truck",
-    keywords: ["dairy commercial auto", "milk tanker insurance", "feed truck insurance", "farm vehicle coverage dairy"],
+    keywords: ["energy contractor commercial auto", "solar installer fleet insurance", "HVAC service van insurance", "electrical contractor auto coverage"],
+  },
+  {
+    slug: "tools-equipment",
+    title: "Tools & Equipment Coverage",
+    short: "Panels, inverters, HVAC units & hand tools",
+    description:
+      "Inland marine coverage for solar panels, inverters, HVAC units, testing equipment, and hand and power tools — whether they're staged at a jobsite, in transit, or sitting in the shop overnight.",
+    icon: "Wrench",
+    keywords: ["contractor tools insurance", "solar panel inland marine insurance", "HVAC equipment coverage", "energy contractor tool theft insurance"],
+  },
+  {
+    slug: "errors-omissions",
+    title: "Errors & Omissions",
+    short: "Design, sizing & installation mistakes",
+    description:
+      "Professional liability for the design and judgment side of energy work — a mis-sized HVAC system, a solar array that underperforms its projected output, or an energy-audit recommendation that doesn't deliver the promised savings.",
+    icon: "FileCheck",
+    keywords: ["energy contractor errors and omissions", "solar installer professional liability", "HVAC design liability insurance", "energy auditor E&O insurance"],
+  },
+  {
+    slug: "commercial-property",
+    title: "Shop & Commercial Property",
+    short: "Warehouse, inventory & office",
+    description:
+      "All-risk coverage for the shop, warehouse, and office — the building, the panel and equipment inventory on the shelves, and the tools and vehicles parked overnight.",
+    icon: "Building2",
+    keywords: ["contractor shop insurance", "solar warehouse property insurance", "HVAC business property coverage", "energy contractor office insurance"],
+  },
+  {
+    slug: "umbrella-liability",
+    title: "Umbrella / Excess Liability",
+    short: "Extra limits above your GL, auto & employer's liability",
+    description:
+      "Additional limits that sit above your general liability, commercial auto, and employer's liability — the layer that protects the business when a serious jobsite injury or property-damage claim exceeds underlying limits.",
+    icon: "Umbrella",
+    keywords: ["energy contractor umbrella insurance", "solar installer excess liability", "HVAC contractor umbrella policy", "electrical contractor excess coverage"],
   },
   {
     slug: "pollution-environmental",
     title: "Pollution & Environmental Liability",
-    short: "Manure, runoff & agrichemical exposure",
+    short: "Refrigerant handling, spills & panel disposal",
     description:
-      "Covers the environmental exposure every dairy carries — manure storage and lagoon failure, nutrient and fertilizer runoff, fuel and chemical leaks, and the cleanup and third-party claims that follow a release into soil or water.",
+      "Covers the environmental exposure energy contractors carry — refrigerant handling and release during HVAC work, fuel and chemical spills from job vehicles and generators, and liability tied to solar-panel and equipment disposal.",
     icon: "Droplets",
-    keywords: ["dairy pollution liability", "manure runoff insurance", "farm environmental liability", "agricultural pollution coverage dairy"],
+    keywords: ["HVAC refrigerant pollution liability", "solar contractor environmental insurance", "energy contractor spill liability", "electrical contractor environmental coverage"],
   },
 ] as const;
 
 export const LOCATIONS = [
-  { slug: "wisconsin", name: "Wisconsin", region: "America's Dairyland", blurb: "The heart of U.S. dairy. We insure Wisconsin operations from rotational-grazing herds in the Driftless Region to large modern freestall and parlor dairies — with class codes and markets built for Wisconsin dairy labor and manure regulations." },
-  { slug: "california", name: "California", region: "Central Valley · North Coast", blurb: "The largest dairy state by production. Coverage built for California's big-herd Central Valley dairies — water-quality and air-emissions exposure, large parlor equipment values, and the state's strict nutrient-management rules." },
-  { slug: "pacific-northwest", name: "Pacific Northwest", region: "Oregon · Washington · Idaho", blurb: "Pasture-based and confinement dairies across the PNW. Programs sized for organic and grass-fed herds, large feed inventories, and the wet-climate manure and runoff exposures of coastal and inland operations." },
-  { slug: "northeast", name: "Northeast & Mid-Atlantic", region: "NY · PA · VT · New England", blurb: "From New York and Pennsylvania to Vermont's organic creameries. Coverage for the region's smaller-herd, higher-value registered stock, bottling and on-farm processing, and seasonal pasture operations." },
-  { slug: "upper-midwest", name: "Upper Midwest", region: "Minnesota · Michigan · Iowa", blurb: "Heritage dairy country across the Upper Midwest. Programs for Minnesota, Michigan, and Iowa dairies — from family tie-stall barns to expanding parlor operations, with feed and forage coverage sized for cold-climate storage." },
-  { slug: "southwest", name: "Texas & the Southwest", region: "TX · NM · AZ", blurb: "Fast-growing Southwest dairy regions in the Texas Panhandle and New Mexico. Coverage for large-herd desert dairies — high water-use exposure, large lagoon systems, and feed and commodity operations under arid-climate conditions." },
-  { slug: "southeast", name: "U.S. Southeast", region: "Florida · Georgia · the Carolinas", blurb: "Southeast dairies facing heat-stress, hurricane, and high-rainfall manure exposures. Programs built for Florida, Georgia, and Carolina operations — including storm and flood-surge considerations for coastal and central dairies." },
-  { slug: "plains", name: "Great Plains", region: "Kansas · Nebraska · the Dakotas", blurb: "Plains-state dairies integrating with feed and forage operations. Coverage for Kansas, Nebraska, and Dakota dairies — herd mortality, large feed inventories, and the equipment and trucking exposure of expansive operations." },
+  { slug: "california", name: "California", region: "Central Valley · Bay Area · SoCal", blurb: "The largest solar and HVAC market in the country. We insure California energy contractors from residential solar installers to commercial HVAC and electrical crews — with markets built for the state's licensing, wage, and workers' comp rules." },
+  { slug: "texas-southwest", name: "Texas & the Southwest", region: "TX · NM · AZ", blurb: "A deregulated energy market and a fast-growing solar and HVAC install base. Coverage built for Texas, New Mexico, and Arizona energy contractors — high heat-load HVAC demand and rapid commercial and residential solar growth." },
+  { slug: "florida-southeast", name: "Florida & the Southeast", region: "FL · GA · the Carolinas", blurb: "Hurricane exposure, high humidity, and year-round HVAC demand drive one of the busiest energy-contractor markets in the country. Programs sized for storm, wind, and flood considerations on top of standard trade risk." },
+  { slug: "pacific-northwest", name: "Pacific Northwest", region: "Oregon · Washington · Idaho", blurb: "Weatherization, insulation, and heat-pump conversion work make up a big share of PNW energy contracting. Coverage built for retrofit-heavy crews working older housing stock and variable weather conditions." },
+  { slug: "northeast", name: "Northeast & Mid-Atlantic", region: "NY · PA · NJ · New England", blurb: "A dense retrofit and insulation market with real winter-storm exposure. Coverage for the region's HVAC, insulation, and electrical contractors working older buildings and tight urban jobsites." },
+  { slug: "mountain-west", name: "Mountain West", region: "CO · UT · NV", blurb: "Fast-growing solar and geothermal installation markets at altitude. Programs for Colorado, Utah, and Nevada energy contractors — high-elevation electrical work and geothermal drilling exposure." },
+  { slug: "upper-midwest", name: "Upper Midwest", region: "Minnesota · Wisconsin · Michigan", blurb: "Cold-climate insulation and weatherization work drives year-round demand. Coverage for Upper Midwest energy contractors handling extreme-temperature HVAC and insulation retrofit jobs." },
+  { slug: "great-plains", name: "Great Plains", region: "Kansas · Nebraska · the Dakotas", blurb: "Wind and utility-scale solar projects alongside rural electrical and HVAC contracting. Coverage for Plains-state energy contractors working both residential routes and larger utility-adjacent projects." },
 ] as const;
 
 export const CREDENTIALS = [
   { label: "Licensed in all 50 states", icon: "MapPin" },
   { label: "Founded 2005 — 20+ years", icon: "CalendarCheck" },
-  { label: "Dairy-knowledgeable agents", icon: "HardHat" },
+  { label: "Energy-trade-knowledgeable agents", icon: "HardHat" },
   { label: "15-minute quote turnaround", icon: "Timer" },
   { label: "2-hour claims response", icon: "Zap" },
   { label: "A.M. Best A+ carrier partners", icon: "Award" },
 ] as const;
 
 export const STATS = [
-  { value: 240, suffix: "+", label: "Dairy operations insured nationwide", prefix: "" },
-  { value: 20, suffix: "+", label: "Years insuring farm operations", prefix: "" },
+  { value: 240, suffix: "+", label: "Energy contractors insured nationwide", prefix: "" },
+  { value: 20, suffix: "+", label: "Years insuring contractors & trades", prefix: "" },
   { value: 15, suffix: " min", label: "Average quote turnaround", prefix: "" },
   { value: 50, suffix: "", label: "States licensed & writing", prefix: "" },
 ] as const;
 
-export const TESTIMONIALS = [
-  { quote: "When we lost registered Jerseys in a barn fire, our old policy undervalued the herd and shorted us on the building. Dairy Insurance rebuilt the parlor at replacement cost and the livestock mortality actually reflected what those animals were worth. Night and day.", name: "Marlene S.", role: "Herd Owner", location: "Wisconsin" },
-  { quote: "A chiller failed overnight and we lost a full bulk tank. The equipment-breakdown and spoilage coverage paid the milk and the repair fast — no arguing about whether a compressor counts. They get that downtime and spoilage are the real costs on a dairy.", name: "Carl R.", role: "Operations Manager", location: "California" },
-  { quote: "Two carriers had declined us over manure-runoff and lagoon exposure. These folks understood our nutrient-management plan, documented it, and placed an A-rated environmental and property program. Real dairy knowledge, not a generic farm quote.", name: "Diane K.", role: "Co-op Member", location: "New York" },
-] as const;
+// No customer testimonials are published for this site yet — do not fabricate quotes.
+export const TESTIMONIALS: { quote: string; name: string; role: string; location: string }[] = [];

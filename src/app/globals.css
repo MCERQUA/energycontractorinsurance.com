@@ -3,10 +3,9 @@
 @tailwind utilities;
 
 /* ============================================================
-   DAIRY INSURANCE — "Fresh Pasture" Design System
-   Light · corporate · clean · rolling-pasture motif
-   (token NAMES inherited; VALUES remapped: clay=pasture green,
-   sage=stream blue, gold=honey)
+   ENERGY CONTRACTOR INSURANCE — "Fresh Pasture" Design System
+   Light · corporate · clean design system inherited from the
+   fleet template (token NAMES/VALUES unchanged from base theme)
    ============================================================ */
 
 @layer base {
