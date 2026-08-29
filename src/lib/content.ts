@@ -44,7 +44,7 @@ export const COPY = {
     h2Lead: "Energy contractor coverage.",
     h2Highlight: "All 50 states.",
     lead: "From California and Texas to the Northeast retrofit market and Southeast storm belt, Contractors Choice Agency writes energy contractor insurance in every state where solar, HVAC, and electrical work happens.",
-    imageAlt: "Energy contractor service van parked at a residential jobsite — national coverage",
+    imageAlt: "Energy contractor service van parked at a residential jobsite",
     badgeTitle: "National coverage for energy contractors.",
     badgeSub: "Writing energy-trade programs in all 50 states since 2005.",
   },
