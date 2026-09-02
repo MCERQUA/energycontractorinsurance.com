@@ -99,7 +99,7 @@ export default async function LocationPage({ params }: Props) {
         <section className="bg-cream py-16 md:py-20">
           <div className="container-tight">
             <FadeIn className="max-w-2xl mb-10">
-              <span className="eyebrow"><span className="h-px w-8 bg-clay" />Coverage for {loc.name} dairies</span>
+              <span className="eyebrow"><span className="h-px w-8 bg-clay" />Coverage for {loc.name} energy contractor businesses</span>
               <h2 className="mt-3 h-section">The full program, built for {loc.name} energy contractors.</h2>
               <p className="mt-4 lead">From a solo operator to a multi-crew installation business, we coordinate every line a {loc.name} energy contractor needs.</p>
             </FadeIn>
