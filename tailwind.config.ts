@@ -1,12 +1,10 @@
 import type { Config } from "tailwindcss";
 
 /* ============================================================
-   DAIRY INSURANCE — "Fresh Pasture" palette
-   Token NAMES are inherited from the shared component architecture;
-   VALUES are remapped to pasture green (primary) / stream blue
-   (secondary) / honey gold (accent).
-   clay = pasture green · sage = stream blue · gold = honey
-   cream = milk paper · sand = soft sage
+   ENERGY CONTRACTOR INSURANCE — warm palette
+   Token NAMES are inherited from the shared component architecture.
+   clay = deep green (primary) · sage = rust (secondary) · gold = honey (accent)
+   cream = warm paper · sand = soft sage
    ============================================================ */
 
 const config: Config = {
