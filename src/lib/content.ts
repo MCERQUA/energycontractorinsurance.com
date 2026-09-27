@@ -131,7 +131,7 @@ export const COPY = {
     lead: "Tell us about your crew and your work. We'll shop A-rated specialty markets and come back with real quotes in about 15 minutes — no obligation.",
     businessPlaceholder: "Sunbelt Solar & Electric LLC",
     emailPlaceholder: "jane@sunbeltsolar.com",
-    phonePlaceholder: "(602) 555-0100",
+    phonePlaceholder: "Best number to reach you",
     messagePlaceholder:
       "Crew size, trade focus (solar, HVAC, electrical, insulation), vehicles, tools and equipment value, coverage lines needed, current insurer, loss history, or anything else that helps us quote accurately…",
     errorMessage: "Something went wrong. Please call us at 844-967-5247 or try again.",
