@@ -1,14 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
 import { Navbar } from "@/components/sections/Navbar";
 import { Footer } from "@/components/sections/Footer";
 import { FadeIn } from "@/components/animations/FadeIn";
 import { SITE } from "@/lib/site";
-import { US_STATES, QUOTE_SERVICE_TYPES, YEARS_OPTIONS, COPY } from "@/lib/content";
-import { submitNetlifyForm } from "@/lib/submitForm";
-import { CheckCircle2, ShieldCheck, ArrowRight, Phone, Clock, Zap, MapPin } from "lucide-react";
+import { QUOTE_SERVICE_TYPES, YEARS_OPTIONS, COPY } from "@/lib/content";
+import { QuoteForm, type PrefaceQuestion } from "@/components/quote/QuoteForm";
+import { ShieldCheck, ArrowRight, Phone, Clock, Zap, MapPin } from "lucide-react";
 
 const trustItems = [
   { icon: ShieldCheck, title: COPY.quote.trustNicheTitle, desc: COPY.quote.trustNicheDesc },
@@ -17,41 +15,95 @@ const trustItems = [
   { icon: MapPin, title: "All 50 states", desc: "Licensed nationwide — NPN #8608479." },
 ];
 
+const TRADE_TYPE_OPTIONS = [
+  "Solar Installation",
+  "HVAC",
+  "Electrical",
+  "Spray Foam / Insulation",
+  "Roofing",
+  "Geothermal / Energy Efficiency",
+  "General Contractor",
+  "Specialty Trade",
+  "Other",
+];
+
+const SUBS_INSURED_OPTIONS = ["Yes — all of them", "Some of them", "No", "We don't use subcontractors"];
+
+// Legacy-only questions of the previous form. Each is also posted under its ORIGINAL field name by legacyFields()
+// below (the QuoteForm itself adds the _info_ copy), so leads/mappers that read the old names keep working.
+const PREFACE_QUESTIONS: PrefaceQuestion[] = [
+  { name: "serviceType", label: "What do you need?", type: "select", options: QUOTE_SERVICE_TYPES, required: true },
+  { name: "subsHaveInsurance", label: "Do your subcontractors have insurance?", type: "select", options: SUBS_INSURED_OPTIONS },
+  { name: "subsInsuredPercent", label: "What percent of your subcontractors have insurance?", type: "text" },
+  { name: "needUninsuredSubCoverage", label: "Do you need coverage for uninsured subcontractors?", type: "select", options: ["Yes", "No", "Not sure"] },
+  { name: "class_code_1", label: "Class code 1 (+ % of operations), if you know it", type: "text" },
+  { name: "class_code_2", label: "Class code 2 (+ % of operations)", type: "text" },
+  { name: "class_code_3", label: "Class code 3 (+ % of operations)", type: "text" },
+  { name: "class_code_4", label: "Class code 4 (+ % of operations)", type: "text" },
+  { name: "class_code_5", label: "Class code 5 (+ % of operations)", type: "text" },
+  { name: "largest_projects", label: "5 largest projects ever (description + dollar amount)", type: "textarea" },
+];
+
+const yearsBucket = (startDate: string) => {
+  const y = parseInt((startDate || "").slice(0, 4), 10);
+  if (!y) return "";
+  const n = new Date().getFullYear() - y;
+  const i = n < 1 ? 0 : n <= 2 ? 1 : n <= 5 ? 2 : n <= 10 ? 3 : 4;
+  return YEARS_OPTIONS[i];
+};
+
+// Every field name the previous /quote form posted that the shared form does not post under that name.
+// Add-only: values come from the canonical answers (or the legacy-only questions above); blanks stay blank.
+function legacyFields(d: Record<string, string>, pf: Record<string, string>): Record<string, string> {
+  const split = [d.residentialPct && `${d.residentialPct}% residential`, d.commercialPct && `${d.commercialPct}% commercial`].filter(Boolean).join(" / ");
+  return {
+    serviceType: pf.serviceType ?? "",
+    yearsInBusiness: yearsBucket(d.businessStartDate),
+    message: d.notes ?? "",
+    priorGrossSales: d.lastGrossSales ?? "",
+    priorSubcontractorExpenses: d.lastSubcontractingCosts ?? "",
+    priorEmployeeCount: d.lastEmployeeCount ?? "",
+    priorEmployeePayroll: d.lastEmployeePayroll ?? "",
+    estGrossSales: d.nextGrossEstimate ?? "",
+    estSubcontractorExpenses: d.nextSubcontractingCosts ?? "",
+    estEmployeeCount: d.nextEmployeeCount ?? "",
+    estEmployeePayroll: d.nextEmployeePayroll ?? "",
+    estMaterialCosts: d.nextMaterialCosts ?? "",
+    subsHaveInsurance: pf.subsHaveInsurance ?? "",
+    subsInsuredPercent: pf.subsInsuredPercent ?? "",
+    needUninsuredSubCoverage: pf.needUninsuredSubCoverage ?? "",
+    year_business_started: d.yearBusinessStarted ?? "",
+    business_description: d.businessDescription ?? "",
+    class_code_1: pf.class_code_1 ?? "",
+    class_code_2: pf.class_code_2 ?? "",
+    class_code_3: pf.class_code_3 ?? "",
+    class_code_4: pf.class_code_4 ?? "",
+    class_code_5: pf.class_code_5 ?? "",
+    residential_vs_commercial: split,
+    new_vs_existing_construction: d.newConstructionPct ? `${d.newConstructionPct}% new construction` : "",
+    largest_projects: pf.largest_projects ?? "",
+    prior_carrier_name: d.currentCarrier ?? "",
+    prior_policy_expiration: d.currentPolicyExpiration ?? "",
+  };
+}
+
+const QUOTE_CLASSES = {
+  form: "space-y-8",
+  section: "space-y-4 pt-5 border-t border-adobe first:border-t-0 first:pt-0",
+  heading: "font-heading font-bold text-espresso text-sm uppercase tracking-wider",
+  grid: "grid sm:grid-cols-2 gap-4",
+  label: "block text-sm font-heading font-semibold text-espresso mb-1.5",
+  input: "w-full px-4 py-3 rounded-xl border border-adobe bg-cream/50 text-espresso placeholder-mocha/60 focus:outline-none focus:border-clay focus:ring-2 focus:ring-clay/20 transition-all text-sm",
+  error: "text-xs text-red-600 mt-1",
+  legend: "block text-sm font-heading font-semibold text-espresso mb-1.5",
+  option: "flex items-center gap-2 text-sm text-espresso",
+  button: "w-full px-8 py-4 bg-clay-gradient text-white font-heading font-bold rounded-full shadow-warm disabled:opacity-60",
+  ok: "p-6 rounded-2xl bg-sage/15 text-espresso font-heading font-semibold",
+  bad: "p-4 rounded-xl bg-red-50 text-red-700 text-sm font-medium",
+  detail: "mt-2 grid sm:grid-cols-2 gap-3 pl-4 border-l-2 border-adobe",
+};
+
 export default function QuotePage() {
-  const [formData, setFormData] = useState({
-    name: "", businessName: "", email: "", phone: "", state: "", serviceType: "", yearsInBusiness: "", message: "", "bot-field": "",
-    address: "", city: "", zip: "",
-    priorGrossSales: "", priorSubcontractorExpenses: "", priorEmployeeCount: "", priorEmployeePayroll: "",
-    estGrossSales: "", estSubcontractorExpenses: "", estEmployeeCount: "", estEmployeePayroll: "", estMaterialCosts: "",
-    subsHaveInsurance: "", subsInsuredPercent: "", needUninsuredSubCoverage: "",
-    year_business_started: "", business_description: "", class_code_1: "", class_code_2: "", class_code_3: "", class_code_4: "", class_code_5: "", residential_vs_commercial: "", new_vs_existing_construction: "", largest_projects: "", prior_carrier_name: "", prior_policy_expiration: "",
-  });
-  const [submitted, setSubmitted] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState("");
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (formData["bot-field"]) return;
-    setSubmitting(true);
-    setError("");
-    try {
-      await submitNetlifyForm("quote", formData);
-      setSubmitted(true);
-    } catch {
-      setError(COPY.quote.errorMessage);
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const inputClass = "w-full px-4 py-3 rounded-xl border border-adobe bg-cream/50 text-espresso placeholder-mocha/60 focus:outline-none focus:border-clay focus:ring-2 focus:ring-clay/20 transition-all text-sm";
-  const labelClass = "block text-sm font-heading font-semibold text-espresso mb-1.5";
-
   return (
     <>
       <Navbar />
@@ -90,190 +142,24 @@ export default function QuotePage() {
               </div>
 
               <div className="lg:col-span-2">
-                {submitted ? (
-                  <FadeIn>
-                    <div className="p-10 md:p-12 rounded-3xl bg-white border border-adobe shadow-card text-center">
-                      <div className="w-16 h-16 rounded-full bg-sage/15 flex items-center justify-center mx-auto mb-4"><CheckCircle2 className="h-8 w-8 text-sage" /></div>
-                      <h2 className="font-heading font-extrabold text-espresso text-2xl mb-3">Quote request received</h2>
-                      <p className="text-mocha mb-2">Thank you! We'll review your operation and reach out within one business day with personalized quotes.</p>
-                      <p className="text-sm text-mocha">Need it sooner? Call <a href={SITE.phoneHref} className="text-clay font-heading font-semibold">{SITE.phone}</a>.</p>
-                      <Link href="/" className="btn-secondary mt-6 inline-flex">Back to home</Link>
-                    </div>
-                  </FadeIn>
-                ) : (
-                  <FadeIn>
-                    <form name="quote" data-netlify="true" netlify-honeypot="bot-field" onSubmit={handleSubmit} className="rounded-3xl bg-white border border-adobe shadow-card p-7 md:p-9 space-y-5">
-                      <input type="hidden" name="form-name" value="quote" />
-                      <input name="bot-field" type="hidden" value={formData["bot-field"]} onChange={handleChange} className="hidden" />
-
-                      <div className="grid sm:grid-cols-2 gap-4">
-                        <div><label htmlFor="name" className={labelClass}>Full name *</label><input id="name" name="name" type="text" required value={formData.name} onChange={handleChange} placeholder="Jane Smith" className={inputClass} /></div>
-                        <div><label htmlFor="businessName" className={labelClass}>Business name *</label><input id="businessName" name="businessName" type="text" required value={formData.businessName} onChange={handleChange} placeholder={COPY.quote.businessPlaceholder} className={inputClass} /></div>
-                      </div>
-
-                      <div className="grid sm:grid-cols-2 gap-4">
-                        <div><label htmlFor="email" className={labelClass}>Email *</label><input id="email" name="email" type="email" required value={formData.email} onChange={handleChange} placeholder={COPY.quote.emailPlaceholder} className={inputClass} /></div>
-                        <div><label htmlFor="phone" className={labelClass}>Phone *</label><input id="phone" name="phone" type="tel" required value={formData.phone} onChange={handleChange} placeholder={COPY.quote.phonePlaceholder} className={inputClass} /></div>
-                      </div>
-
-                      <div className="grid sm:grid-cols-2 gap-4">
-                        <div><label htmlFor="state" className={labelClass}>Primary state *</label>
-                          <select id="state" name="state" required value={formData.state} onChange={handleChange} className={inputClass}><option value="">Select a state…</option>{US_STATES.map((s) => (<option key={s} value={s}>{s}</option>))}</select>
-                        </div>
-                        <div><label htmlFor="yearsInBusiness" className={labelClass}>Years in business</label>
-                          <select id="yearsInBusiness" name="yearsInBusiness" value={formData.yearsInBusiness} onChange={handleChange} className={inputClass}><option value="">Select…</option>{YEARS_OPTIONS.map((y) => (<option key={y} value={y}>{y}</option>))}</select>
-                        </div>
-                      </div>
-
-                      <div className="space-y-4 pt-5 border-t border-adobe">
-                        <div>
-                          <h3 className="font-heading font-bold text-espresso text-sm uppercase tracking-wider">Business address</h3>
-                          <p className="text-xs text-mocha/70 mt-0.5">Where your operation is based.</p>
-                        </div>
-                        <div><label htmlFor="address" className={labelClass}>Street address</label><input id="address" name="address" type="text" value={formData.address} onChange={handleChange} placeholder="123 Main St, Suite 200" className={inputClass} /></div>
-                        <div className="grid sm:grid-cols-2 gap-4">
-                          <div><label htmlFor="city" className={labelClass}>City</label><input id="city" name="city" type="text" value={formData.city} onChange={handleChange} placeholder="Phoenix" className={inputClass} /></div>
-                          <div><label htmlFor="zip" className={labelClass}>ZIP code</label><input id="zip" name="zip" type="text" inputMode="numeric" pattern="[0-9]{5}(-[0-9]{4})?" value={formData.zip} onChange={handleChange} placeholder="85001" className={inputClass} /></div>
-                        </div>
-                      </div>
-
-                      <div><label htmlFor="serviceType" className={labelClass}>What do you need? *</label>
-                        <select id="serviceType" name="serviceType" required value={formData.serviceType} onChange={handleChange} className={inputClass}><option value="">Select coverage…</option>{QUOTE_SERVICE_TYPES.map((s) => (<option key={s} value={s}>{s}</option>))}</select>
-                      </div>
-
-                      <div className="space-y-4 pt-5 border-t border-adobe">
-                        <div>
-                          <h3 className="font-heading font-bold text-espresso text-sm uppercase tracking-wider">Prior year</h3>
-                          <p className="text-xs text-mocha/70 mt-0.5">Your last completed 12 months. Best estimates are fine.</p>
-                        </div>
-                        <div className="grid sm:grid-cols-2 gap-4">
-                          <div><label htmlFor="priorGrossSales" className={labelClass}>Gross sales</label><input id="priorGrossSales" name="priorGrossSales" type="text" inputMode="numeric" value={formData.priorGrossSales} onChange={handleChange} placeholder="$1,200,000" className={inputClass} /></div>
-                          <div><label htmlFor="priorSubcontractorExpenses" className={labelClass}>Subcontractor expenses</label><input id="priorSubcontractorExpenses" name="priorSubcontractorExpenses" type="text" inputMode="numeric" value={formData.priorSubcontractorExpenses} onChange={handleChange} placeholder="$250,000" className={inputClass} /></div>
-                        </div>
-                        <div className="grid sm:grid-cols-2 gap-4">
-                          <div><label htmlFor="priorEmployeeCount" className={labelClass}>Employee count</label><input id="priorEmployeeCount" name="priorEmployeeCount" type="text" inputMode="numeric" value={formData.priorEmployeeCount} onChange={handleChange} placeholder="8" className={inputClass} /></div>
-                          <div><label htmlFor="priorEmployeePayroll" className={labelClass}>Employee payroll</label><input id="priorEmployeePayroll" name="priorEmployeePayroll" type="text" inputMode="numeric" value={formData.priorEmployeePayroll} onChange={handleChange} placeholder="$420,000" className={inputClass} /></div>
-                        </div>
-                      </div>
-
-                      <div className="space-y-4 pt-5 border-t border-adobe">
-                        <div>
-                          <h3 className="font-heading font-bold text-espresso text-sm uppercase tracking-wider">Next twelve months — estimates</h3>
-                          <p className="text-xs text-mocha/70 mt-0.5">What you expect over the coming year.</p>
-                        </div>
-                        <div className="grid sm:grid-cols-2 gap-4">
-                          <div><label htmlFor="estGrossSales" className={labelClass}>Estimated gross sales</label><input id="estGrossSales" name="estGrossSales" type="text" inputMode="numeric" value={formData.estGrossSales} onChange={handleChange} placeholder="$1,500,000" className={inputClass} /></div>
-                          <div><label htmlFor="estSubcontractorExpenses" className={labelClass}>Estimated subcontractor expenses</label><input id="estSubcontractorExpenses" name="estSubcontractorExpenses" type="text" inputMode="numeric" value={formData.estSubcontractorExpenses} onChange={handleChange} placeholder="$300,000" className={inputClass} /></div>
-                        </div>
-                        <div className="grid sm:grid-cols-2 gap-4">
-                          <div><label htmlFor="estEmployeeCount" className={labelClass}>Estimated employee count (year total)</label><input id="estEmployeeCount" name="estEmployeeCount" type="text" inputMode="numeric" value={formData.estEmployeeCount} onChange={handleChange} placeholder="10" className={inputClass} /></div>
-                          <div><label htmlFor="estEmployeePayroll" className={labelClass}>Estimated annual employee payroll</label><input id="estEmployeePayroll" name="estEmployeePayroll" type="text" inputMode="numeric" value={formData.estEmployeePayroll} onChange={handleChange} placeholder="$520,000" className={inputClass} /></div>
-                        </div>
-                        <div><label htmlFor="estMaterialCosts" className={labelClass}>Estimated material costs</label><input id="estMaterialCosts" name="estMaterialCosts" type="text" inputMode="numeric" value={formData.estMaterialCosts} onChange={handleChange} placeholder="$180,000" className={inputClass} /></div>
-                      </div>
-
-                      <div className="space-y-4 pt-5 border-t border-adobe">
-                        <div>
-                          <h3 className="font-heading font-bold text-espresso text-sm uppercase tracking-wider">Subcontractor insurance</h3>
-                          <p className="text-xs text-mocha/70 mt-0.5">This drives how your policy is rated — please answer even if you rarely use subs.</p>
-                        </div>
-                        <div className="grid sm:grid-cols-2 gap-4">
-                          <div><label htmlFor="subsHaveInsurance" className={labelClass}>Do your subcontractors have insurance?</label><select id="subsHaveInsurance" name="subsHaveInsurance" value={formData.subsHaveInsurance} onChange={handleChange} className={inputClass}><option value="">Select…</option><option value="Yes — all of them">Yes — all of them</option><option value="Some of them">Some of them</option><option value="No">No</option><option value="We don't use subcontractors">We don't use subcontractors</option></select></div>
-                          <div><label htmlFor="subsInsuredPercent" className={labelClass}>What percent of your subcontractors have insurance?</label><input id="subsInsuredPercent" name="subsInsuredPercent" type="text" inputMode="numeric" value={formData.subsInsuredPercent} onChange={handleChange} placeholder="75%" className={inputClass} /></div>
-                        </div>
-                        <div><label htmlFor="needUninsuredSubCoverage" className={labelClass}>Do you need coverage for uninsured subcontractors?</label><select id="needUninsuredSubCoverage" name="needUninsuredSubCoverage" value={formData.needUninsuredSubCoverage} onChange={handleChange} className={inputClass}><option value="">Select…</option><option value="Yes">Yes</option><option value="No">No</option><option value="Not sure">Not sure</option></select></div>
-                      </div>
-
-                      <div>
-                        <label htmlFor="message" className={labelClass}>Tell us about your operation <span className="text-mocha/60 font-normal">(optional)</span></label>
-                        <textarea id="message" name="message" rows={4} value={formData.message} onChange={handleChange} placeholder={COPY.quote.messagePlaceholder} className={`${inputClass} resize-none`} />
-                      </div>
-
-                      {/* complete contractor field set — forms-required-fields.json */}
-                      <div className="space-y-4 pt-5 border-t border-adobe">
-                        <div>
-                          <h3 className="font-heading font-bold text-espresso text-sm uppercase tracking-wider">Your operation</h3>
-                          <p className="text-xs text-mocha/70 mt-0.5">How the work splits and what you build.</p>
-                        </div>
-                        <div className="grid sm:grid-cols-2 gap-4">
-                          <div>
-                        <label className={labelClass}>Year business started</label>
-                        <input type="number" name="year_business_started" value={formData.year_business_started} onChange={(e) => setFormData({ ...formData, year_business_started: e.target.value })} className={inputClass} />
-                      </div>
-                          <div>
-                        <label className={labelClass}>Residential vs commercial split</label>
-                        <input type="text" name="residential_vs_commercial" value={formData.residential_vs_commercial} onChange={(e) => setFormData({ ...formData, residential_vs_commercial: e.target.value })} className={inputClass} />
-                      </div>
-                        </div>
-                        <div>
-                        <label className={labelClass}>New construction vs existing / remodel</label>
-                        <input type="text" name="new_vs_existing_construction" value={formData.new_vs_existing_construction} onChange={(e) => setFormData({ ...formData, new_vs_existing_construction: e.target.value })} className={inputClass} />
-                      </div>
-                        <div>
-                        <label className={labelClass}>Description of business</label>
-                        <textarea name="business_description" rows={3} value={formData.business_description} onChange={(e) => setFormData({ ...formData, business_description: e.target.value })} className={inputClass} />
-                      </div>
-                        <div>
-                        <label className={labelClass}>5 largest projects ever (description + dollar amount)</label>
-                        <textarea name="largest_projects" rows={3} value={formData.largest_projects} onChange={(e) => setFormData({ ...formData, largest_projects: e.target.value })} placeholder="Description and dollar amount for each" className={inputClass} />
-                      </div>
-                      </div>
-                      <div className="space-y-4 pt-5 border-t border-adobe">
-                        <div>
-                          <h3 className="font-heading font-bold text-espresso text-sm uppercase tracking-wider">Class codes</h3>
-                          <p className="text-xs text-mocha/70 mt-0.5">If you know them. Leave blank and we'll assign them.</p>
-                        </div>
-                        <div className="grid sm:grid-cols-2 gap-4">
-                          <div>
-                        <label className={labelClass}>Class code 1 (+ % of operations)</label>
-                        <input type="text" name="class_code_1" value={formData.class_code_1} onChange={(e) => setFormData({ ...formData, class_code_1: e.target.value })} className={inputClass} />
-                      </div>
-                          <div>
-                        <label className={labelClass}>Class code 2 (+ % of operations)</label>
-                        <input type="text" name="class_code_2" value={formData.class_code_2} onChange={(e) => setFormData({ ...formData, class_code_2: e.target.value })} className={inputClass} />
-                      </div>
-                        </div>
-                        <div className="grid sm:grid-cols-2 gap-4">
-                          <div>
-                        <label className={labelClass}>Class code 3 (+ % of operations)</label>
-                        <input type="text" name="class_code_3" value={formData.class_code_3} onChange={(e) => setFormData({ ...formData, class_code_3: e.target.value })} className={inputClass} />
-                      </div>
-                          <div>
-                        <label className={labelClass}>Class code 4 (+ % of operations)</label>
-                        <input type="text" name="class_code_4" value={formData.class_code_4} onChange={(e) => setFormData({ ...formData, class_code_4: e.target.value })} className={inputClass} />
-                      </div>
-                        </div>
-                        <div>
-                        <label className={labelClass}>Class code 5 (+ % of operations)</label>
-                        <input type="text" name="class_code_5" value={formData.class_code_5} onChange={(e) => setFormData({ ...formData, class_code_5: e.target.value })} className={inputClass} />
-                      </div>
-                      </div>
-                      <div className="space-y-4 pt-5 border-t border-adobe">
-                        <div>
-                          <h3 className="font-heading font-bold text-espresso text-sm uppercase tracking-wider">Prior policy</h3>
-                          <p className="text-xs text-mocha/70 mt-0.5">Your expiring or most recent policy.</p>
-                        </div>
-                        <div className="grid sm:grid-cols-2 gap-4">
-                          <div>
-                        <label className={labelClass}>Prior insurance carrier name</label>
-                        <input type="text" name="prior_carrier_name" value={formData.prior_carrier_name} onChange={(e) => setFormData({ ...formData, prior_carrier_name: e.target.value })} className={inputClass} />
-                      </div>
-                        </div>
-                        <div>
-                        <label className={labelClass}>Prior policy expiration date</label>
-                        <input type="date" name="prior_policy_expiration" value={formData.prior_policy_expiration} onChange={(e) => setFormData({ ...formData, prior_policy_expiration: e.target.value })} className={inputClass} />
-                      </div>
-                      </div>
-
-                      {error && <p className="text-red-600 text-sm font-medium">{error}</p>}
-
-                      <button type="submit" disabled={submitting} className="w-full flex items-center justify-center gap-2 px-8 py-4 bg-clay-gradient text-white font-heading font-bold rounded-full shadow-warm hover:shadow-warm-lg hover:-translate-y-0.5 transition-all disabled:opacity-60 disabled:cursor-not-allowed">
-                        {submitting ? "Sending…" : "Request my free quote"}{!submitting && <ArrowRight className="h-5 w-5" />}
-                      </button>
-                      <p className="text-xs text-center text-mocha/70">No spam. No commitment. We'll only contact you about your quote.</p>
-                      </form>
-                  </FadeIn>
-                )}
+                <FadeIn>
+                  <div className="rounded-3xl bg-white border border-adobe shadow-card p-7 md:p-9">
+                    <QuoteForm
+                      formName="quote"
+                      tradeName="Energy Contractor"
+                      endpoint="/__forms.html"
+                      options={{ yn: true, feinRequired: false }}
+                      tradeTypeOptions={TRADE_TYPE_OPTIONS}
+                      defaults={{ coverageTypes: "General Liability" }}
+                      prefaceQuestions={PREFACE_QUESTIONS}
+                      legacyFields={legacyFields}
+                      classes={QUOTE_CLASSES}
+                      successMessage="Thank you! We'll review your operation and reach out within one business day with personalized quotes."
+                      errorMessage={COPY.quote.errorMessage}
+                    />
+                    <p className="mt-4 text-xs text-center text-mocha/70">No spam. No commitment. We'll only contact you about your quote.</p>
+                  </div>
+                </FadeIn>
               </div>
             </div>
           </div>
